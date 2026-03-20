@@ -48,15 +48,29 @@ const Navigation = createStaticNavigation(RootStack);
 //==================================
 // Screens
 //==================================
+//final screen for players. just has the buzzer
+//todo: lag compensation
 function PlayerBuzzerScreen() {
   const navigator = useNavigation();
-  return (
-    <View style={styles.container}>
-      <Text>Play game!</Text>
-    </View>
-  )
-}
+  const {playerName} = useGameContext();
 
+  async function BuzzIn() {
+    const response = await fetch('http://10.0.0.173:3000/buzz', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ playerName: playerName })
+    });
+    console.log(playerName,'buzzed in');
+  }
+    return (
+      <View style={styles.container}>
+        <Text>Play game!</Text>
+        <Pressable style={styles.button} onPress={() => BuzzIn()}>
+          <Text>BUZZ IN!</Text>
+        </Pressable>
+      </View>
+    )
+}
 
 function PlayerSignInScreen() {
   const navigator = useNavigation();

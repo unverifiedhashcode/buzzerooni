@@ -1,13 +1,33 @@
 let players = []
+let queue = []
 
 const express = require('express');
 const app = express();
 const port = 3000;
 app.use(express.json());
 
+//QUEUE MODIFICATION
+//todo: queue reads NAME now but later it will need to assign each player with a time.
+app.post('/buzz',(req,res)=> {
+    const playerInQueue = queue.find(p => p.name === req.body.playerName);
+    //todo: calculate latency and put their actual spot
+    if (!playerInQueue){
+        queue.push({'name':req.body.playerName,'submitTime':0});
+        res.json({success:true})
+    } else{
+        //todo: perhaps some logic here about a player already being in the queue.
+        res.json({ success: true });
+    }
+})
+
+app.get('/readQueue',(req,res) => {
+    res.json(queue);
+})
+
+
 //ADMIN CONTROLS
 app.get('/',(req,res)=> {
-    res.send('hello world');
+    res.send('home screen. nothing here!');
 })
 
 app.post('/createPlayer',(req, res)=> {
