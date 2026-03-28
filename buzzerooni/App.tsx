@@ -76,7 +76,7 @@ function PlayerBuzzerScreen() {
     return (
       <View style={styles.container}>
         <Text>Play game!</Text>
-        <Pressable style={[styles.button, {backgroundColor: isBuzzed ? 'red' : 'green' }]} onPress={() => !isBuzzed && BuzzIn()}}>
+        <Pressable style={[styles.button, {backgroundColor: isBuzzed ? 'red' : 'green' }]} onPress={() => !isBuzzed && BuzzIn()}>
           <Text>BUZZ IN!</Text>
         </Pressable>
       </View>
