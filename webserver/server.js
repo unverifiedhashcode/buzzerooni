@@ -30,11 +30,6 @@ app.get('/',(req,res)=> {
     res.send('home screen. nothing here!');
 })
 
-app.post('/createPlayer',(req, res)=> {
-    players.push({'name': req.body.playerName, 'score':0});
-    res.json({success:true})
-})
-
 app.post('/removePlayer',(req, res)=> {
     players = players.filter(p => p.name !== req.body.playerName);
     res.json({success:true})
@@ -51,7 +46,20 @@ app.post('/modifyScore', (req, res) => {
     }
 });
 
-//APP SETUP
+//Server controls
+app.post('/createPlayer',(req, res)=> { //todo: check if their name already exists. Return false if not
+    const playerNameExists = players.find(player => player.name === req.body.playerName); //for player in list, check if player.name field matches at any point
+    
+    if (!playerNameExists) {
+        console.log(req.body.playerName, 'has been added to the game.');
+        players.push({'name': req.body.playerName, 'score':0});
+        res.json({success:true})
+    } else {
+        console.log(req.body.playerName, 'tried to add a dupe player.');
+        res.json({success: false});
+    }    
+})
+
 app.get('/getPlayers',(req,res) => {
     res.json(players);
 })
