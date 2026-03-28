@@ -1,0 +1,5 @@
+To launch the app for local testing:
+npx expo start --tunnel
+
+Launch webserver:
+node server.js

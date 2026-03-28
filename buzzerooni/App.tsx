@@ -48,24 +48,35 @@ const Navigation = createStaticNavigation(RootStack);
 //==================================
 // Screens
 //==================================
-//final screen for players. just has the buzzer
+//final screen for players. just has the buzzer. Should make it start green, then switch to red once buzzed in
 //todo: lag compensation
+
+
 function PlayerBuzzerScreen() {
   const navigator = useNavigation();
   const {playerName} = useGameContext();
+  const [isBuzzed, SetBuzzStatus] = useState(false);
 
   async function BuzzIn() {
-    const response = await fetch('http://10.0.0.173:3000/buzz', {
+    console.log(playerName,'is buzzing in');
+    try {
+      const response = await fetch('http://10.0.0.173:3000/buzz', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ playerName: playerName })
-    });
-    console.log(playerName,'buzzed in');
+      });
+
+      SetBuzzStatus(true);
+    } catch (error) {
+      SetBuzzStatus(false);
+    }
+    
+    
   }
     return (
       <View style={styles.container}>
         <Text>Play game!</Text>
-        <Pressable style={styles.button} onPress={() => BuzzIn()}>
+        <Pressable style={[styles.button, {backgroundColor: isBuzzed ? 'red' : 'green' }]} onPress={() => !isBuzzed && BuzzIn()}}>
           <Text>BUZZ IN!</Text>
         </Pressable>
       </View>
