@@ -90,17 +90,13 @@ function AdminHome() {
       headers: { 'Content-Type': 'application/json'}
     })
   }
+
+
   return(
     <View style={styles.container}>
-      <Pressable style={styles.button} onPress={() => ResetQueue()}>
-        <Text>Reset Buzzers</Text>
-      </Pressable>
-      <Pressable style={styles.button} onPress={() => ResetQueue()}>
-        <Text>Change Scores</Text>
-      </Pressable>
-      <Pressable style={styles.button} onPress={() => ResetQueue()}>
-        <Text>Remove Players</Text>
-      </Pressable>
+      <CustomButton title='Reset Buzzers' onPress={ResetQueue}/>
+      <CustomButton title='Change Scores' onPress={ResetQueue}/>
+      <CustomButton title='Remove Players' onPress={ResetQueue}/>
     </View>
   )
   //change points
@@ -198,9 +194,9 @@ function PlayerSignInScreen() {
           onChangeText = {SetPlayerName}
         />
         <Text>{playerName}</Text>
-        <Pressable style = {styles.button} onPress={()=> playerName && CreatePlayer()}>
-          <Text>Join!</Text>
-        </Pressable>
+
+        <CustomButton title='Join!' onPress={()=> playerName && CreatePlayer()}/>
+
       </View>
 
     </KeyboardAvoidingView>
@@ -212,23 +208,12 @@ function StartScreen(){
   return (
     <View style={styles.container}>
       <Text>Welcome</Text>
-      <Pressable 
-        style = {styles.button} 
-        onPress = {()=>navigator.navigate('PlayerSignIn')}>
-        <Text>Player Enter</Text>
-      </Pressable>
+      <CustomButton title='Player Enter' onPress={()=>navigator.navigate('PlayerSignIn')}/>
 
-      <Pressable
-        style = {styles.button}
-        onPress = {()=>navigator.navigate('CreateLobby')}>
-        <Text>Create Lobby</Text> 
-      </Pressable>
+      <CustomButton title='Create Lobby' onPress={()=>navigator.navigate('CreateLobby')}/>
 
-      <Pressable
-        style = {styles.button}
-        onPress = {()=>navigator.navigate('AdminHome')}> 
-        <Text>Admin Enter</Text> 
-      </Pressable>
+      <CustomButton title='Admin Enter' onPress={()=>navigator.navigate('AdminHome')}/>
+
     </View>
   )
 }
@@ -270,9 +255,53 @@ export default function App() {
   );
 }
 
+
+
+//==================================
+//Reusable Components
+//==================================
+interface CustomButtonProps {
+  title: string;
+  onPress: () => void;
+  opacityTime?: number; //optional parameter
+}
+
+//reusable button component
+const CustomButton = ({ onPress, title, opacityTime = 500 }: CustomButtonProps) => {
+  const [isFeedbackActive, setIsFeedbackActive] = useState(false);
+
+  const handlePress = () => {
+    //set opacity
+    setIsFeedbackActive(true);
+    
+    //run the trigger function
+    onPress();
+
+    //reset opacity after .5 seconds
+    setTimeout(() => {
+      setIsFeedbackActive(false);
+    }, opacityTime);
+  };
+
+  return (
+    <Pressable 
+      onPress={handlePress}
+      style={[
+        styles.button, 
+        { opacity: isFeedbackActive ? 0.5 : 1 } //partial opacity when pressed
+      ]}
+    >
+      <Text>{title}</Text>
+    </Pressable>
+  );
+};
+
+
+
 //==================================
 //Stylesheet
 //==================================
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
