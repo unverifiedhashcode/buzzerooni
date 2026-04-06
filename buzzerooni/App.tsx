@@ -30,6 +30,8 @@ const RootStack = createNativeStackNavigator({
       screen: StartScreen,
       options: {title: 'Welcome'}
     },
+
+    //Player Screens
     PlayerSignIn:
     {
       screen: PlayerSignInScreen,
@@ -40,6 +42,25 @@ const RootStack = createNativeStackNavigator({
       screen: PlayerBuzzerScreen,
       options: {title: 'GAME TIME'}
     },
+
+    //Admin Screens
+    CreateLobby:
+    {
+      screen: CreateLobby,
+      options: {title: 'Create Lobby'}
+    },
+
+    AdminHome:
+    {
+      screen: AdminHome,
+      options: {title: 'Admin Main'}
+    },
+
+    AdminSignIn:
+    {
+      screen: AdminSignInScreen,
+      options: {title: 'Admin sign in'}
+    },
   }
 })
 
@@ -48,8 +69,57 @@ const Navigation = createStaticNavigation(RootStack);
 //==================================
 // Screens
 //==================================
-//final screen for players. just has the buzzer. Should make it start green, then switch to red once buzzed in
 //todo: lag compensation
+function AdminSignInScreen() { 
+  const navigator = useNavigation();
+  
+  return (
+    <View style={styles.container}>
+      
+    </View>
+  )
+}
+
+function AdminHome() { 
+  const navigator = useNavigation();
+  //clear queue (reset buzzers)
+  async function ResetQueue(){
+    console.log('resetting queue');
+    const response = await fetch('http://10.0.0.173:3000/resetQueue', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json'}
+    })
+  }
+  return(
+    <View style={styles.container}>
+      <Pressable style={styles.button} onPress={() => ResetQueue()}>
+        <Text>Reset Buzzers</Text>
+      </Pressable>
+      <Pressable style={styles.button} onPress={() => ResetQueue()}>
+        <Text>Change Scores</Text>
+      </Pressable>
+      <Pressable style={styles.button} onPress={() => ResetQueue()}>
+        <Text>Remove Players</Text>
+      </Pressable>
+    </View>
+  )
+  //change points
+  
+  //remove players
+
+
+}
+function CreateLobby() { //Todo: do
+  const navigator = useNavigation();
+  //Player Limit
+  
+  //honestly gonna put this on hold. setting up a webserver is fun but tangental to my goal of learning app development
+  return (
+    <View style={styles.container}>
+
+    </View>
+  )
+}
 
 
 function PlayerBuzzerScreen() {
@@ -105,7 +175,7 @@ function PlayerSignInScreen() {
     console.log(response.status,": added player",playerName,"successfully");
     navigator.navigate('PlayerBuzzer');
     //const data = await response.json();
-    //console.log(data);
+  //console.log(data);
     
     //FAIL
     } catch (error) {
@@ -145,15 +215,26 @@ function StartScreen(){
       <Pressable 
         style = {styles.button} 
         onPress = {()=>navigator.navigate('PlayerSignIn')}>
-
         <Text>Player Enter</Text>
+      </Pressable>
+
+      <Pressable
+        style = {styles.button}
+        onPress = {()=>navigator.navigate('CreateLobby')}>
+        <Text>Create Lobby</Text> 
+      </Pressable>
+
+      <Pressable
+        style = {styles.button}
+        onPress = {()=>navigator.navigate('AdminHome')}> 
+        <Text>Admin Enter</Text> 
       </Pressable>
     </View>
   )
 }
 
 //==================================
-//API Functions
+//API Functions !!!should i do this later? not sure how this works
 //==================================
 
 //==================================

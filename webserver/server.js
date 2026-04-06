@@ -24,6 +24,11 @@ app.get('/readQueue',(req,res) => {
     res.json(queue);
 })
 
+app.put('/resetQueue', (req,res) => { 
+    queue = [];
+    res.json({success: true});
+})
+
 
 //ADMIN CONTROLS
 app.get('/',(req,res)=> {
@@ -45,6 +50,7 @@ app.post('/modifyScore', (req, res) => {
         res.json({ success: false });
     }
 });
+
 
 //Server controls
 app.post('/createPlayer',(req, res)=> { //todo: check if their name already exists. Return false if not
